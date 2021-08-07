@@ -1,4 +1,4 @@
-package com.israelmessias.minhasfinancas.Entity;
+package com.israelmessias.minhasfinancas.model.Entity;
 
 public enum StatusLancamento {
     PENDENTE,

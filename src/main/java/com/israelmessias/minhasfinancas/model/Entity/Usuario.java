@@ -1,4 +1,4 @@
-package com.israelmessias.minhasfinancas.Entity;
+package com.israelmessias.minhasfinancas.model.Entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
