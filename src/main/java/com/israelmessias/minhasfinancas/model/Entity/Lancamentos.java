@@ -3,6 +3,7 @@ package com.israelmessias.minhasfinancas.model.Entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.*;
+
 import org.springframework.data.convert.Jsr310Converters;
 
 import lombok.EqualsAndHashCode;
@@ -15,7 +16,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name="lacamentos", schema = "financas")
+@Table(name = "lacamentos", schema = "financas")
 public class Lancamentos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +25,10 @@ public class Lancamentos {
     @Column(name = "descricao")
     private String descricao;
 
-    @Column(name="mes")
+    @Column(name = "mes")
     private Integer mes;
 
-    @Column(name="ano")
+    @Column(name = "ano")
     private Integer ano;
 
     @ManyToOne
@@ -44,7 +45,7 @@ public class Lancamentos {
     @Column(name = "tipo")
     @Enumerated(value = EnumType.STRING)
     private TipoLancamento tipo;
-    
+
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
     private StatusLancamento status;
