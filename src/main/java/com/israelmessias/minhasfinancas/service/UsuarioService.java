@@ -1,6 +1,8 @@
 package com.israelmessias.minhasfinancas.service;
 
 import com.israelmessias.minhasfinancas.model.Entity.Usuario;
+import org.springframework.stereotype.Service;
+
 
 public interface UsuarioService {
     //Metodo para autenticar a entrada do usuario no sistema

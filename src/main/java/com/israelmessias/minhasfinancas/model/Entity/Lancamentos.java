@@ -39,7 +39,6 @@ public class Lancamentos {
     private BigDecimal valor;
 
     @Column(name = "data_cadastro")
-    @Convert(converter = Jsr310Converters.LocalDateToDateConverter.class)
     private LocalDate dataCadastro;
 
     @Column(name = "tipo")

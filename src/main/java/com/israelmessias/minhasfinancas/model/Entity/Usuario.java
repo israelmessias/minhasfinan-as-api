@@ -9,13 +9,15 @@ import javax.persistence.Table;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "usuario", schema = "financas")
+@AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
-@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Builder
 public class Usuario {
 
@@ -32,4 +34,8 @@ public class Usuario {
 
     @Column(name = "senha")
     private String senha;
+
+    public Usuario(String email){
+        this.setEmail(email);
+    }
 }
