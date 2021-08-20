@@ -2,13 +2,14 @@ package com.israelmessias.minhasfinancas.model.repository;
 
 import com.israelmessias.minhasfinancas.model.Entity.Usuario;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 
 @SpringBootTest
@@ -21,10 +22,11 @@ public class UsuarioRepositoryTest {
     @Test
     public void deveVerificarAExistenciaDeUmEmail(){
         //Cenario
-        Usuario usuario1 = Usuario.builder().email("israel@email.com").build();
+        Usuario usuario1 = Usuario.builder().nome("israel").email("israel@email.com").build();
         usuarioRepository.save(usuario1);
         //Execução
         boolean result = usuarioRepository.existsByEmail("israel@email.com");
         //verificação
+        Assertions.assertThat(result).isTrue();
     }
 }
