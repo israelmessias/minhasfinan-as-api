@@ -21,12 +21,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuario autenticar(String email, String senha) {
+    public Usuario autenticar(String email, String senha)
+    {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
-        if(!usuario.isPresent()){
+        if(!usuario.isPresent())
+        {
             throw new ErroAutenticacao("Usuario não encontrado para o email informado.");
         }
-        if(!usuario.get().getSenha().equals(senha)){
+        if(!usuario.get().getSenha().equals(senha))
+        {
             throw new ErroAutenticacao("Senha invalida!");
         }
         return usuario.get();
@@ -34,15 +37,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public Usuario salvarUsuario(Usuario usuario) {
+    public Usuario salvarUsuario(Usuario usuario)
+    {
         validarEmail(usuario.getEmail());
         return usuarioRepository.save(usuario);
     }
 
     @Override
-    public void validarEmail(String email) {
+    public void validarEmail(String email)
+    {
         boolean existe = usuarioRepository.existsByEmail(email);
-        if(existe){
+        if(existe)
+        {
             throw new RegraNegocioException("Ja existe um usuario cadastrado!");
         }
     }
