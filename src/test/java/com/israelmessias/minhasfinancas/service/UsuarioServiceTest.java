@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -18,20 +19,15 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-public class UsuarioServiceTest {
-    //Não necessita do @Autowired 'Dependency Injection'.
+public class UsuarioServiceTest
+{
+    @SpyBean
     UsuarioServiceImpl service;
+
     @MockBean
     UsuarioRepository usuarioRepository;
 
-    /*Chamada falsa no repository -> repository = Mockito...
-    O service
-    * Chamada verdadeira no service -> service = new Service(repository)*/
-    @BeforeEach
-    public void setup()
-    {
-        service = new UsuarioServiceImpl(usuarioRepository);
-    }
+/******************************************** VALIDAÇÕES ***************************************************************/
     /*testa o metodo deveValida do service
     *
     *Mockito.when"Simula quando"
@@ -64,6 +60,22 @@ public class UsuarioServiceTest {
         });
     }
 
+    /*****************************AUTENTICAÇÕES***************************/
+
+    @Test
+    public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComEmailInformado()
+    {
+        //cenario
+        Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());//retorna vazio
+
+        //
+        Throwable exception = org.assertj.core.api.Assertions.catchThrowable(() ->
+                service.autenticar("email@email.com", "senha"));
+
+        org.assertj.core.api.Assertions.assertThat(exception)
+                .isInstanceOf(ErroAutenticacao.class).hasMessage("Usuario não encontrado para o email informado.");
+    }
+
     @Test
     public void deveAutenticarUmUsuarioComSucesso()
     {
@@ -83,20 +95,6 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComEmailInformado()
-    {
-            //cenario
-            Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());//retorna vazio
-
-            //
-        Throwable exception = org.assertj.core.api.Assertions.catchThrowable(() ->
-            service.autenticar("email@email.com", "senha"));
-
-        org.assertj.core.api.Assertions.assertThat(exception)
-                .isInstanceOf(ErroAutenticacao.class).hasMessage("Usuario não encontrado para o email informado.");
-    }
-
-    @Test
     public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComSenhaInformado()
     {
             String senha = "senha";
@@ -108,5 +106,43 @@ public class UsuarioServiceTest {
                     service.autenticar("email@email.com", "123"));
             org.assertj.core.api.Assertions.assertThat(exception)
                     .isInstanceOf(ErroAutenticacao.class).hasMessage("Senha invalida!");
+    }
+
+    /*************************************************SALVAR***********************************************************/
+    @Test
+    public void deveSalvarUsuario(){
+        // cenario:Não fazer nada quando mockar validarEmail
+        Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
+
+        Usuario usuario = Usuario.builder().id(1L).nome("usuario").
+                email("ususario@usuario.com").senha("senha").build();
+
+        Mockito.when(usuarioRepository.save(Mockito.any(Usuario.class) ))
+                .thenReturn(usuario);
+        //ação
+        Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
+
+        //Verificação: Verifica o usuario do cenario
+        org.assertj.core.api.Assertions.assertThat(usuarioSalvo).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(usuarioSalvo.getId()).isEqualTo(1L);
+        org.assertj.core.api.Assertions.assertThat(usuarioSalvo.getNome()).isEqualTo("usuario");
+        org.assertj.core.api.Assertions.assertThat(usuarioSalvo.getEmail()).isEqualTo("ususario@usuario.com");
+        org.assertj.core.api.Assertions.assertThat(usuarioSalvo.getSenha()).isEqualTo("senha");
+    }
+    @Test
+    public void naoDeveSalvarUsuario()
+    {
+        //cenario
+        //cenario
+        String email = "email@email.com";
+        Usuario usuario = Usuario.builder().email(email).build();
+        Mockito.doThrow(RegraNegocioException.class).when(service).validarEmail(email);
+
+        //acao
+        org.junit.jupiter.api.Assertions
+                .assertThrows(RegraNegocioException.class, () -> service.salvarUsuario(usuario) ) ;
+
+        //verificacao
+        Mockito.verify( usuarioRepository, Mockito.never() ).save(usuario);
     }
 }
