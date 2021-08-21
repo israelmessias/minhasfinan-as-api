@@ -30,7 +30,6 @@ public class UsuarioServiceTest {
     @BeforeEach
     public void setup()
     {
-        usuarioRepository = Mockito.mock(UsuarioRepository.class);
         service = new UsuarioServiceImpl(usuarioRepository);
     }
     /*testa o metodo deveValida do service
@@ -64,6 +63,7 @@ public class UsuarioServiceTest {
             service.validarEmail("email@email.com");
         });
     }
+
     @Test
     public void deveAutenticarUmUsuarioComSucesso()
     {
@@ -81,29 +81,32 @@ public class UsuarioServiceTest {
         //verificação
         org.assertj.core.api.Assertions.assertThat(result).isNotNull();
     }
+
     @Test
     public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComEmailInformado()
     {
-        Assertions.assertThrows(ErroAutenticacao.class, ()->
-        {
             //cenario
             Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());//retorna vazio
 
             //
-            service.autenticar("email@email.com", "senha");
-        });
+        Throwable exception = org.assertj.core.api.Assertions.catchThrowable(() ->
+            service.autenticar("email@email.com", "senha"));
+
+        org.assertj.core.api.Assertions.assertThat(exception)
+                .isInstanceOf(ErroAutenticacao.class).hasMessage("Usuario não encontrado para o email informado.");
     }
+
     @Test
     public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComSenhaInformado()
     {
-        Assertions.assertThrows(ErroAutenticacao.class, ()->
-        {
             String senha = "senha";
             Usuario usuario = Usuario.builder().email("email@email.com").senha(senha).build();
             Mockito.when(usuarioRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
 
             //ação
-            service.autenticar("email@email.com", "123");
-        });
+            Throwable exception = org.assertj.core.api.Assertions.catchThrowable(() ->
+                    service.autenticar("email@email.com", "123"));
+            org.assertj.core.api.Assertions.assertThat(exception)
+                    .isInstanceOf(ErroAutenticacao.class).hasMessage("Senha invalida!");
     }
 }
