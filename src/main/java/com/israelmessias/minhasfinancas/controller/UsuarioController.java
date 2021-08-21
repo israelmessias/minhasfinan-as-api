@@ -1,8 +1,7 @@
 package com.israelmessias.minhasfinancas.controller;
 
-import javax.persistence.EntityManager;
-
 import com.israelmessias.minhasfinancas.api.dto.UsuarioDTO;
+import com.israelmessias.minhasfinancas.exception.ErroAutenticacao;
 import com.israelmessias.minhasfinancas.exception.RegraNegocioException;
 import com.israelmessias.minhasfinancas.model.Entity.Usuario;
 import com.israelmessias.minhasfinancas.service.UsuarioService;
@@ -47,4 +46,15 @@ public class UsuarioController {
        }
     }
 
+    @PostMapping("/autenticar")
+    public ResponseEntity autenticar(@RequestBody UsuarioDTO dto)
+    {
+        try 
+        {
+            Usuario usuarioAutenticado = service.autenticar(dto.getEmail(), dto.getSenha()); 
+            return ResponseEntity.ok(usuarioAutenticado);
+        } catch (ErroAutenticacao e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
