@@ -38,6 +38,7 @@ public class LancamentoServiceImpl implements LancamentoService
     public Lancamentos atualizar(Lancamentos lancamentos)
     {
         Objects.requireNonNull(lancamentos.getId());
+        lancamentos.setStatus(StatusLancamento.PENDENTE);
         return lancamentoRepository.save(lancamentos);
     }
 
@@ -47,6 +48,7 @@ public class LancamentoServiceImpl implements LancamentoService
     public void deletar(Lancamentos lancamentos)
     {
         Objects.requireNonNull(lancamentos.getId());
+        validar(lancamentos);
         lancamentoRepository.delete(lancamentos);
     }
 
