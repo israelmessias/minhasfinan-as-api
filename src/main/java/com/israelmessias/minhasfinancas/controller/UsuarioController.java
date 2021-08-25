@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/usuarios")
 public class UsuarioController {
     @Autowired
     private UsuarioService service;
@@ -32,7 +32,7 @@ public class UsuarioController {
         return "Salve pivete!!!";
     }
 
-    @PostMapping("/usuarios")
+    @PostMapping("/salvar")
     public ResponseEntity salvar(@RequestBody UsuarioDTO usuarioDTO)
     {
        Usuario usuario = Usuario.builder().nome(usuarioDTO.getNome()).
