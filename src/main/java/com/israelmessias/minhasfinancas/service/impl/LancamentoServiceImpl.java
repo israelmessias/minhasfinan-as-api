@@ -1,7 +1,7 @@
 package com.israelmessias.minhasfinancas.service.impl;
 
 import com.israelmessias.minhasfinancas.exception.RegraNegocioException;
-import com.israelmessias.minhasfinancas.model.Entity.Lancamentos;
+import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
 import com.israelmessias.minhasfinancas.model.Entity.StatusLancamento;
 import com.israelmessias.minhasfinancas.model.repository.LancamentoRepository;
 import com.israelmessias.minhasfinancas.service.LancamentoService;
@@ -27,35 +27,35 @@ public class LancamentoServiceImpl implements LancamentoService
     //Salva os lançamentos
     @Override
     @Transactional
-    public Lancamentos salvar(Lancamentos lancamentos)
+    public Lancamento salvar(Lancamento lancamento)
     {
-        return lancamentoRepository.save(lancamentos);
+        return lancamentoRepository.save(lancamento);
     }
 
     //Salva os lançamentos que venham conter um objeto
     @Override
     @Transactional
-    public Lancamentos atualizar(Lancamentos lancamentos)
+    public Lancamento atualizar(Lancamento lancamento)
     {
-        Objects.requireNonNull(lancamentos.getId());
-        lancamentos.setStatus(StatusLancamento.PENDENTE);
-        return lancamentoRepository.save(lancamentos);
+        Objects.requireNonNull(lancamento.getId());
+        lancamento.setStatus(StatusLancamento.PENDENTE);
+        return lancamentoRepository.save(lancamento);
     }
 
     //Deleta o objeto
     @Override
     @Transactional
-    public void deletar(Lancamentos lancamentos)
+    public void deletar(Lancamento lancamento)
     {
-        Objects.requireNonNull(lancamentos.getId());
-        validar(lancamentos);
-        lancamentoRepository.delete(lancamentos);
+        Objects.requireNonNull(lancamento.getId());
+        validar(lancamento);
+        lancamentoRepository.delete(lancamento);
     }
 
     //Buscas
     @Override
     @Transactional(readOnly = true)//transação de leitura
-    public List<Lancamentos> buscar(Lancamentos lancamentoFiltro)
+    public List<Lancamento> buscar(Lancamento lancamentoFiltro)
     {
         Example example = Example.of(lancamentoFiltro,
                 ExampleMatcher.matching().withIgnoreCase()
@@ -65,32 +65,32 @@ public class LancamentoServiceImpl implements LancamentoService
 
     @Override
     @Transactional
-    public void atualizarStatus(Lancamentos lancamentos, StatusLancamento status)
+    public void atualizarStatus(Lancamento lancamento, StatusLancamento status)
     {
-        lancamentos.setStatus(status);
-        atualizar(lancamentos);
+        lancamento.setStatus(status);
+        atualizar(lancamento);
     }
 
     // Valida descrições para não serem vazias ou so com space
     @Override
-    public void validar(Lancamentos lancamentos)
+    public void validar(Lancamento lancamento)
     {
-        if(lancamentos.getDescricao()==null || lancamentos.getDescricao().trim().equals(""))
+        if(lancamento.getDescricao()==null || lancamento.getDescricao().trim().equals(""))
             throw new RegraNegocioException("Informe uma descrição valida!");
 
-        if(lancamentos.getMes() == null || lancamentos.getMes() < 1 || lancamentos.getMes()>12)
+        if(lancamento.getMes() == null || lancamento.getMes() < 1 || lancamento.getMes()>12)
             throw new RegraNegocioException("Informe mês valido!");
 
-        if(lancamentos.getAno() == null || lancamentos.getAno().toString().length() != 4)
+        if(lancamento.getAno() == null || lancamento.getAno().toString().length() != 4)
             throw new RegraNegocioException("Informe ano valido!");
 
-        if(lancamentos.getUsuario() == null || lancamentos.getUsuario().getId() == null)
+        if(lancamento.getUsuario() == null || lancamento.getUsuario().getId() == null)
             throw new RegraNegocioException("Informe um Usuario valido!");
 
-        if(lancamentos.getValor() == null || lancamentos.getValor().compareTo(BigDecimal.ZERO) < 1)
+        if(lancamento.getValor() == null || lancamento.getValor().compareTo(BigDecimal.ZERO) < 1)
             throw new RegraNegocioException("Informe um Valor valido!");
 
-        if(lancamentos.getTipo() == null)
+        if(lancamento.getTipo() == null)
             throw new RegraNegocioException("Informe um tipo valido!");
     }
 }

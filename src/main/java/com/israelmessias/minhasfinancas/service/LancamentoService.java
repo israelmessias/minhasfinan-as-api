@@ -1,20 +1,20 @@
 package com.israelmessias.minhasfinancas.service;
 
-import com.israelmessias.minhasfinancas.model.Entity.Lancamentos;
+import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
 import com.israelmessias.minhasfinancas.model.Entity.StatusLancamento;
 
 import java.util.List;
 
 public interface LancamentoService
 {
-    Lancamentos salvar (Lancamentos lancamentos);
+    Lancamento salvar (Lancamento lancamento);
 
-    Lancamentos atualizar (Lancamentos lancamentos);
-    void deletar (Lancamentos lancamentos);
+    Lancamento atualizar (Lancamento lancamento);
+    void deletar (Lancamento lancamento);
 
-    List<Lancamentos> buscar (Lancamentos lancamentoFiltro);
+    List<Lancamento> buscar (Lancamento lancamentoFiltro);
 
-    void atualizarStatus (Lancamentos lancamentos, StatusLancamento status);
+    void atualizarStatus (Lancamento lancamento, StatusLancamento status);
 
-    void validar (Lancamentos lancamentos);
+    void validar (Lancamento lancamento);
 }
