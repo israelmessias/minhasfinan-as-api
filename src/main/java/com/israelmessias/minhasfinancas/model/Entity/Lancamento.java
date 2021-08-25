@@ -17,7 +17,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "lacamentos", schema = "financas")
-public class Lancamentos {
+public class Lancamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
