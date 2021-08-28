@@ -8,6 +8,7 @@ import com.israelmessias.minhasfinancas.model.Entity.TipoLancamento;
 import com.israelmessias.minhasfinancas.model.Entity.Usuario;
 import com.israelmessias.minhasfinancas.service.LancamentoService;
 import com.israelmessias.minhasfinancas.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +18,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/lancamentos")
+@RequiredArgsConstructor
 public class LancamentoController
 {
-   private LancamentoService service;
-   private UsuarioService usuarioService;
-
-    public LancamentoController(LancamentoService service, UsuarioService usuarioService)
-    {
-        this.service = service;
-        this.usuarioService = usuarioService;
-    }
+    /*
+    * @RequiredArgsConstructor  faz um contrutor para atributos com final*/
+   private final LancamentoService service;
+   private final UsuarioService usuarioService;
 
     @PostMapping("/salvar")
     public ResponseEntity salvar(@RequestBody LancamentoDTO dto)
