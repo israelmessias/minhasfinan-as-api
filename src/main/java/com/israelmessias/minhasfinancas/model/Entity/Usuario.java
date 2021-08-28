@@ -12,13 +12,13 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "usuario", schema = "financas")
 @AllArgsConstructor
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode
 @Builder
+@Table(name = "usuario", schema = "financas")
 public class Usuario {
 
     @Id
