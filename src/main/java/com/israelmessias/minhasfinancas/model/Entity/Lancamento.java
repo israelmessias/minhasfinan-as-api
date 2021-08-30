@@ -4,19 +4,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.*;
 
+import lombok.*;
 import org.springframework.data.convert.Jsr310Converters;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "lacamentos", schema = "financas")
+@Table(name = "lacamento", schema = "financas")
 public class Lancamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +29,12 @@ public class Lancamento {
     @Column(name = "ano")
     private Integer ano;
 
+    @Column(name = "valor")
+    private BigDecimal valor;
+
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
-
-    @Column(name = "valor")
-    private BigDecimal valor;
 
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
