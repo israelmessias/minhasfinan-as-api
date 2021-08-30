@@ -26,13 +26,15 @@ public class LancamentoController
    private final LancamentoService service;
    private final UsuarioService usuarioService;
 
-    @PostMapping("/salvar")
-    public ResponseEntity salvar(@RequestBody LancamentoDTO dto)
+    @PostMapping
+    public ResponseEntity salvar( @RequestBody LancamentoDTO dto )
     {
         try
         {
             Lancamento entidade = converter(dto);
+
             entidade = service.salvar(entidade);
+
             return new ResponseEntity(entidade, HttpStatus.CREATED);
         }
         catch (RegraNegocioException e)
@@ -97,17 +99,24 @@ public class LancamentoController
     {
         Lancamento lancamento = new Lancamento();
         lancamento.setId(dto.getId());
-        lancamento.setDescricao(dto.getDescriçao());
+        lancamento.setDescricao(dto.getDescricao());
         lancamento.setAno(dto.getAno());
         lancamento.setMes(dto.getMes());
         lancamento.setValor(dto.getValor());
 
-        Usuario usuario = usuarioService.obterPorId(dto.getId()).orElseThrow
-                (() -> new RegraNegocioException("Usuario não encontrado para o id inforo"));
+        Usuario usuario = usuarioService
+                .obterPorId(dto.getUsuario())
+                .orElseThrow( () -> new RegraNegocioException("Usuário não encontrado para o Id informado.") );
 
         lancamento.setUsuario(usuario);
-        lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
-        lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+
+        if(dto.getTipo() != null) {
+            lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
+        }
+
+        if(dto.getStatus() != null) {
+            lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+        }
 
         return lancamento;
     }
