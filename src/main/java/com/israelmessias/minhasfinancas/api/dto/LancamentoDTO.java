@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class LancamentoDTO {
     private Long id;
 
-    private String descriçao;
+    private String descricao;
 
     private Integer mes;
 
@@ -22,7 +22,7 @@ public class LancamentoDTO {
 
     private BigDecimal valor;
 
-    private Long Usuario;
+    private Long usuario;
 
     private String tipo;
 
