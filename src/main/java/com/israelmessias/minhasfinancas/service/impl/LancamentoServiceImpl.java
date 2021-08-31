@@ -9,8 +9,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -79,9 +79,9 @@ public class LancamentoServiceImpl implements LancamentoService
     @Override
     public void validar(Lancamento lancamento) {
 
-        /*if(lancamento.getDescricao() == null || lancamento.getDescricao().trim().equals("")) {
+        if(lancamento.getDescricao() == null || lancamento.getDescricao().trim().equals("")) {
             throw new RegraNegocioException("Informe uma Descrição válida.");
-        }*/
+        }
 
         if(lancamento.getMes() == null || lancamento.getMes() < 1 || lancamento.getMes() > 12) {
             throw new RegraNegocioException("Informe um Mês válido.");
@@ -91,7 +91,7 @@ public class LancamentoServiceImpl implements LancamentoService
             throw new RegraNegocioException("Informe um Ano válido.");
         }
 
-        if(lancamento.getUsuario().getId() == null|| lancamento.getUsuario()==null) {
+        if(lancamento.getUsuario() == null || lancamento.getUsuario().getId() == null) {
             throw new RegraNegocioException("Informe um Usuário.");
         }
 
@@ -103,7 +103,6 @@ public class LancamentoServiceImpl implements LancamentoService
             throw new RegraNegocioException("Informe um tipo de Lançamento.");
         }
     }
-
     @Override
     public Optional<Lancamento> obterPorId(Long id) {
         return lancamentoRepository.findById(id);
