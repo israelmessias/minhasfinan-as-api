@@ -10,7 +10,6 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -19,11 +18,11 @@ import java.util.Optional;
 @Service
 public class LancamentoServiceImpl implements LancamentoService
 {
-    LancamentoRepository lancamentoRepository;
+    private LancamentoRepository repository;
 
-    public LancamentoServiceImpl (LancamentoRepository lancamentoRepository)
+    public LancamentoServiceImpl(LancamentoRepository lancamentoRepository)
     {
-        this.lancamentoRepository = lancamentoRepository;
+        this.repository = lancamentoRepository;
     }
 
     //Salva os lançamentos
@@ -33,7 +32,7 @@ public class LancamentoServiceImpl implements LancamentoService
     {
         validar(lancamento);
         lancamento.setStatus(StatusLancamento.PENDENTE);
-        return lancamentoRepository.save(lancamento);
+        return repository.save(lancamento);
     }
 
     //Salva os lançamentos que venham conter um objeto
@@ -43,7 +42,7 @@ public class LancamentoServiceImpl implements LancamentoService
     {
         Objects.requireNonNull(lancamento.getId());
         lancamento.setStatus(StatusLancamento.PENDENTE);
-        return lancamentoRepository.save(lancamento);
+        return repository.save(lancamento);
     }
 
     //Deleta o objeto
@@ -53,7 +52,7 @@ public class LancamentoServiceImpl implements LancamentoService
     {
         Objects.requireNonNull(lancamento.getId());
         validar(lancamento);
-        lancamentoRepository.delete(lancamento);
+        repository.delete(lancamento);
     }
 
     //Buscas
@@ -64,7 +63,7 @@ public class LancamentoServiceImpl implements LancamentoService
         Example example = Example.of(lancamentoFiltro,
                 ExampleMatcher.matching().withIgnoreCase()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
-        return lancamentoRepository.findAll(example);
+        return repository.findAll(example);
     }
 
     @Override
@@ -105,6 +104,6 @@ public class LancamentoServiceImpl implements LancamentoService
     }
     @Override
     public Optional<Lancamento> obterPorId(Long id) {
-        return lancamentoRepository.findById(id);
+        return repository.findById(id);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.data.convert.Jsr310Converters;
 @Table(name = "lacamento", schema = "financas")
 public class Lancamento {
     @Id
+    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
