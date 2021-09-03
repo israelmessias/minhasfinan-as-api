@@ -2,7 +2,7 @@ package com.israelmessias.minhasfinancas.service.impl;
 
 import com.israelmessias.minhasfinancas.exception.RegraNegocioException;
 import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
-import com.israelmessias.minhasfinancas.model.Entity.StatusLancamento;
+import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
 import com.israelmessias.minhasfinancas.model.repository.LancamentoRepository;
 import com.israelmessias.minhasfinancas.service.LancamentoService;
 import org.springframework.data.domain.Example;
