@@ -4,8 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.*;
 
+import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
+import com.israelmessias.minhasfinancas.model.enums.TipoLancamento;
 import lombok.*;
-import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 @Entity

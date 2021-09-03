@@ -1,4 +1,4 @@
-package com.israelmessias.minhasfinancas.model.Entity;
+package com.israelmessias.minhasfinancas.model.enums;
 
 public enum TipoLancamento {
     RECEITA,

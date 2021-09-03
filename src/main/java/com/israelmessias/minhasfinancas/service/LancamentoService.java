@@ -1,7 +1,7 @@
 package com.israelmessias.minhasfinancas.service;
 
 import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
-import com.israelmessias.minhasfinancas.model.Entity.StatusLancamento;
+import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
 
 import java.util.List;
 import java.util.Optional;
