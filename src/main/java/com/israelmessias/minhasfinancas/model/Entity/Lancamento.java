@@ -6,19 +6,19 @@ import javax.persistence.*;
 
 import lombok.*;
 import org.springframework.data.convert.Jsr310Converters;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "lacamento", schema = "financas")
+@Table(name = "lancamento", schema = "financas")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lancamento {
+
     @Id
-    @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "descricao")
@@ -30,14 +30,15 @@ public class Lancamento {
     @Column(name = "ano")
     private Integer ano;
 
-    @Column(name = "valor")
-    private BigDecimal valor;
-
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
+    @Column(name = "valor")
+    private BigDecimal valor;
+
     @Column(name = "data_cadastro")
+    @Convert(converter = Jsr310JpaConverters.LocalDateConverter.class)
     private LocalDate dataCadastro;
 
     @Column(name = "tipo")
