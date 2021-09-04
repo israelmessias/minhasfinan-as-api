@@ -1,6 +1,7 @@
 package com.israelmessias.minhasfinancas.controller;
 
 import com.israelmessias.minhasfinancas.api.dto.LancamentoDTO;
+import com.israelmessias.minhasfinancas.api.dto.AtualizarStatusDTO;
 import com.israelmessias.minhasfinancas.exception.RegraNegocioException;
 import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
 import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
@@ -61,6 +62,29 @@ public class LancamentoController
                 orElseGet(() -> new ResponseEntity("Lançamento não encontrado na base de dados", HttpStatus.BAD_REQUEST));
     }
 
+    @PutMapping("{id}/atualizarStatus")
+    public ResponseEntity atualizarStatus(@PathVariable("id") Long id ,@RequestBody AtualizarStatusDTO status)
+    {
+        return service.obterPorId(id).map( entity -> {
+            StatusLancamento statusLancamento = StatusLancamento.valueOf(status.getStatus());
+            if(statusLancamento == null)
+            {
+                return ResponseEntity.badRequest().body("Não foi possivel atualizar o status!");
+            }
+            try
+            {
+                entity.setStatus(statusLancamento);
+                service.atualizar(entity);
+                return ResponseEntity.ok(entity);
+            }catch(RegraNegocioException e)
+            {
+                return  ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }).orElseGet(() ->
+                new ResponseEntity<>("Lançamento não encontrado na base de dados.", HttpStatus.BAD_REQUEST));
+    }
+
+
     @DeleteMapping("{id}")
     public ResponseEntity deletar(@PathVariable("id") Long id){
         return service.obterPorId(id).map(entidade -> {
@@ -75,7 +99,7 @@ public class LancamentoController
             @RequestParam(value="descricao", required = false) String descricao,
             @RequestParam(value="mes", required = false) Integer mes,
             @RequestParam(value="ano", required = false) Integer ano,
-            @RequestParam(value="Usuario") Long idUsuario
+            @RequestParam(value="usuario", required = false) Long idUsuario
     ) {
         Lancamento lancamentoFiltro = new Lancamento();
         lancamentoFiltro.setDescricao(descricao);
