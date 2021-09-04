@@ -3,6 +3,7 @@ package com.israelmessias.minhasfinancas.service;
 import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
 import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,6 @@ public interface LancamentoService
    void validar (Lancamento lancamento);
 
     Optional<Lancamento>obterPorId(Long id);
+
+    BigDecimal obterSaldoPorUsuario(Long id);
 }
