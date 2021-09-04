@@ -1,6 +1,7 @@
 package com.israelmessias.minhasfinancas.model.repository;
 
 import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
+import com.israelmessias.minhasfinancas.model.Entity.Usuario;
 import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
 import com.israelmessias.minhasfinancas.model.enums.TipoLancamento;
 import org.assertj.core.api.Assertions;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -28,7 +30,8 @@ public class LancamentoRepositoryTest
     @Autowired
     TestEntityManager entityManager;
 
-    private Lancamento criarLancamentos() {
+    public Lancamento criarLancamentos()
+    {
         return Lancamento.builder().
                 ano(2019).mes(9).
                 descricao("Lançamento qualquer").
@@ -36,6 +39,13 @@ public class LancamentoRepositoryTest
                 .tipo(TipoLancamento.RECEITA)
                 .status(StatusLancamento.PENDENTE)
                 .dataCadastro(LocalDate.now()).build();
+    }
+
+    private Lancamento criarEPersistirLancamento()
+    {
+        Lancamento lancamento = criarLancamentos();
+        entityManager.persist(lancamento);
+        return lancamento;
     }
 
     @Test
@@ -51,13 +61,39 @@ public class LancamentoRepositoryTest
     @Test
     public void  deveDeletarUmLancamento()
     {
-        Lancamento lancamento = criarLancamentos();
-        entityManager.persist(lancamento);
+        Lancamento lancamento = criarEPersistirLancamento();
 
-       lancamento =  entityManager.find(Lancamento.class, lancamento.getId());
+        lancamento =  entityManager.find(Lancamento.class, lancamento.getId());
 
        lancamentoRepository.delete(lancamento);
        Lancamento lancamentoInexistente = entityManager.find(Lancamento.class, lancamento.getId());
        Assertions.assertThat(lancamentoInexistente).isNull();
+    }
+
+    @Test
+    public void atualizarLancamento()
+    {
+        Lancamento lancamento = criarEPersistirLancamento();
+
+        lancamento.setAno(2020);
+        lancamento.setDescricao("Teste Atualizar");
+        lancamento.setStatus(StatusLancamento.CANCELADO);
+        lancamentoRepository.save(lancamento);
+
+        //A classe = tabela, depois a primary key
+        Lancamento lancamentoAtualizado = entityManager.find(Lancamento.class, lancamento.getId());
+        Assertions.assertThat(lancamentoAtualizado.getAno()).isEqualTo(2020);
+        Assertions.assertThat(lancamentoAtualizado.getDescricao()).isEqualTo("Teste Atualizar");
+        Assertions.assertThat(lancamentoAtualizado.getStatus()).isEqualTo(StatusLancamento.CANCELADO);
+    }
+
+    @Test
+    public void buscarId()
+    {
+        Lancamento lancamento = criarEPersistirLancamento();
+
+        Optional<Lancamento> lancamentoEncontrado = lancamentoRepository.findById(lancamento.getId());
+
+        Assertions.assertThat(lancamentoEncontrado.isPresent()).isTrue();
     }
 }
