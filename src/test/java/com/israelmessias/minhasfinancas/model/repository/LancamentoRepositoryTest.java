@@ -30,7 +30,7 @@ public class LancamentoRepositoryTest
     @Autowired
     TestEntityManager entityManager;
 
-    public Lancamento criarLancamentos()
+    public static Lancamento criarLancamentos()
     {
         return Lancamento.builder().
                 ano(2019).mes(9).
