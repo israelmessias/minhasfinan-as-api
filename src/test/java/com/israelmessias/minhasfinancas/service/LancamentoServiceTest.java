@@ -9,6 +9,7 @@ import com.israelmessias.minhasfinancas.service.impl.LancamentoServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -87,5 +88,30 @@ public class LancamentoServiceTest
         org.assertj.core.api.Assertions.
                 catchThrowableOfType( () -> service.atualizar(lancamentoSalvar), NullPointerException.class );
         Mockito.verify(repository, Mockito.never()).save(lancamentoSalvar);
+    }
+
+    @Test
+    public void deletarUmLancamento()
+    {
+        //cenario
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamentos();
+        lancamento.setId(1L);
+
+        //execução
+        service.deletar(lancamento);
+
+        Mockito.verify(repository).delete(lancamento);
+    }
+
+    @Test
+    public void deletarLancamentoQueNaoExiste()
+    {
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamentos();
+
+        //execução
+        org.assertj.core.api.Assertions.
+                catchThrowableOfType( () -> service.deletar(lancamento), NullPointerException.class );
+
+        Mockito.verify(repository, Mockito.never()).delete(lancamento);
     }
 }
