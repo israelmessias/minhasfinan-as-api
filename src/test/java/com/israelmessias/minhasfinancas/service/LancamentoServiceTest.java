@@ -13,8 +13,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -113,5 +117,24 @@ public class LancamentoServiceTest
                 catchThrowableOfType( () -> service.deletar(lancamento), NullPointerException.class );
 
         Mockito.verify(repository, Mockito.never()).delete(lancamento);
+    }
+
+    @Test
+    public void filtrarLancamento()
+    {
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamentos();
+        lancamento.setId(1L);
+
+        List<Lancamento> lista = Arrays.asList(lancamento);
+        Mockito.when(repository.findAll(Mockito.any(Example.class)) ).thenReturn(lista);
+
+        //execução
+        List<Lancamento> result = service.buscar(lancamento);
+
+        Assertions.assertThat(result)
+                .isNotEmpty()
+                .hasSize(1)
+                .contains(lancamento);
+
     }
 }
