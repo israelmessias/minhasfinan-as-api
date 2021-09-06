@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -155,5 +156,39 @@ public class LancamentoServiceTest
         //verificação
         Assertions.assertThat(lancamento.getStatus()).isEqualTo(statusLancamento);
         Mockito.verify(service).atualizar(lancamento);
+    }
+
+    @Test
+    public void obterLancamentoPorId()
+    {
+        //cenario
+        Long id = 1L;
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamentos();
+        lancamento.setId(id);
+
+        Mockito.when(repository.findById(id)).thenReturn(Optional.of(lancamento));
+
+        //execução
+        Optional<Lancamento> result = service.obterPorId(id);
+
+        //verificação
+        Assertions.assertThat(result.isPresent()).isTrue();
+    }
+
+    @Test
+    public void retornarVazioLancamentoPorId()
+    {
+        //cenario
+        Long id = 1L;
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamentos();
+        lancamento.setId(id);
+
+        Mockito.when(repository.findById(id)).thenReturn(Optional.empty());
+
+        //execução
+        Optional<Lancamento> result = service.obterPorId(id);
+
+        //verificação
+        Assertions.assertThat(result.isPresent()).isFalse();
     }
 }
