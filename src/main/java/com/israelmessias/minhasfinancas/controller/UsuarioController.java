@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/salvar")
-    public ResponseEntity salvar(@RequestBody UsuarioDTO usuarioDTO)
+    public ResponseEntity salvar(@Valid @RequestBody UsuarioDTO usuarioDTO)
     {
        Usuario usuario = Usuario.builder().nome(usuarioDTO.getNome()).
        email(usuarioDTO.getEmail()).senha(usuarioDTO.getSenha()).build();

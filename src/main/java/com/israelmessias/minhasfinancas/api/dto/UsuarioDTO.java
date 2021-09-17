@@ -1,6 +1,7 @@
 package com.israelmessias.minhasfinancas.api.dto;
 
 import lombok.*;
+import javax.validation.constraints.Email;
 
 @Setter
 @Getter
@@ -9,6 +10,7 @@ import lombok.*;
 @Builder
 public class UsuarioDTO {
     private String nome;
+    @Email
     private String email;
     private String senha;
 }
