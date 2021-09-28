@@ -10,7 +10,6 @@ import javax.validation.constraints.Email;
 @Builder
 public class UsuarioDTO {
     private String nome;
-    @Email
     private String email;
     private String senha;
 }
