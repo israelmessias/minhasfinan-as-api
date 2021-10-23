@@ -1,7 +1,6 @@
 package com.israelmessias.minhasfinancas.model.repository;
 
 import com.israelmessias.minhasfinancas.model.Entity.Lancamento;
-import com.israelmessias.minhasfinancas.model.Entity.Usuario;
 import com.israelmessias.minhasfinancas.model.enums.StatusLancamento;
 import com.israelmessias.minhasfinancas.model.enums.TipoLancamento;
 import org.assertj.core.api.Assertions;
