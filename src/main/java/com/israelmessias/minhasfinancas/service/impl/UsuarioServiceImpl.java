@@ -6,6 +6,7 @@ import com.israelmessias.minhasfinancas.model.Entity.Usuario;
 import com.israelmessias.minhasfinancas.model.repository.UsuarioRepository;
 import com.israelmessias.minhasfinancas.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
@@ -14,10 +15,13 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private UsuarioRepository usuarioRepository;
+    private PasswordEncoder encoder;
+
     @Autowired
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PasswordEncoder encoder) {
         super();
         this.usuarioRepository = usuarioRepository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -28,7 +32,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         {
             throw new ErroAutenticacao("Usuario não encontrado para o email informado.");
         }
-        if(!usuario.get().getSenha().equals(senha))
+        /*O metodo matches recebe a senha criptografada do banco de dados
+        * e compara com a senha passada pelo usuario*/
+        boolean senhasCorrespodem = encoder.matches(senha, usuario.get().getSenha());
+
+        if(!senhasCorrespodem)
         {
             throw new ErroAutenticacao("Senha invalida!");
         }
@@ -40,7 +48,14 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario salvarUsuario(Usuario usuario)
     {
         validarEmail(usuario.getEmail());
+        criptografarSenha(usuario);
         return usuarioRepository.save(usuario);
+    }
+
+    private void criptografarSenha(Usuario usuario)
+    {
+        String senhaCripto = encoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCripto);
     }
 
     @Override
